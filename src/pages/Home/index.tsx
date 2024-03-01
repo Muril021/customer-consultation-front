@@ -1,32 +1,19 @@
-import { useEffect, useState } from "react";
-import { api } from "../../api";
+import { useContext, useEffect, useState } from "react";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { Link } from "react-router-dom";
-
-type Customers = {
-  id: number,
-  name: string,
-  date: Date,
-  tel: number[],
-  is_active: boolean
-};
+import { CustomersContext } from "../../contexts/customers";
 
 const Home = () => {
-  const [customers, setCustomers] = useState<Customers[]>([]);
   const [search, setSearch] = useState('');
 
-  useEffect(() => {
-    getCustomer();
-  }, [])
+  const { customers, getCustomers } = useContext(CustomersContext)!;
 
-  const getCustomer = () => {
-    api.get('/customers')
-      .then(response => setCustomers(response.data))
-      .catch(error => console.log(error));
-  }
+  useEffect(() => {
+    getCustomers();
+  }, [])
 
   return (
     <>
@@ -36,7 +23,7 @@ const Home = () => {
         type="text"
         placeholder="Digite o nome do cliente"
         value={search}
-        onChange={e => setSearch(e.target.value)}
+        onChange={event => setSearch(event.target.value)}
       />
       <hr/>
       <table>
